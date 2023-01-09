@@ -1,92 +1,112 @@
-# tp-ps
+# Exercice 1 : on ... do ....
 
+Il s'agit d'implanter une commande `on` qui exécute une
+seconde commande `cmd` si et seulement si l'exécution
+d'une première commande `pred` se termine sur un succès :
 
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab-etu.fil.univ-lille.fr/pdsplus-2023/tp-ps.git
-git branch -M main
-git push -uf origin main
+```bash
+on pred do cmd
 ```
 
-## Integrate with your tools
+On utilise cette commande comme sur l'exemple suivant :
 
-- [ ] [Set up project integrations](https://gitlab-etu.fil.univ-lille.fr/pdsplus-2023/tp-ps/-/settings/integrations)
+```bash
+on test -r spool/file do lpr spool/file
+```
 
-## Collaborate with your team
+qui ne fait appel à la commande d'impression `lpr` que si le fichier
+existe (commande `test`).
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## SUGGESTIONS 
 
-## Test and Deploy
+- Pour tester la commande `on`, utilisez les commandes `true` et `false` ;
+  - `true` retourne toujours la valeur 0 ;
+  - `false` retourne toujours la valeur 1.
 
-Use the built-in continuous integration in GitLab.
+  Souvenez-vous que par convention une valeur de retour égal à zéro
+  signifie qu'il n'y a pas d'erreur.
+  
+  Par exemple 
+  ```bash
+  on true do cat file.txt
+  ```
+  montrera le contenu du fichier file.txt (s'il existe) sur la sortie standard. 
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- Pour visualiser la valeur de retour d'un processus sur le terminal
+  bash, utilisez la commande
+  
+		echo $?
 
-***
+- Pour savoir si votre programme est correct, vous pouvez lancer la commande 
 
-# Editing this README
+		make test-docker 
+		 
+  qui lancera des tests sur votre programme. 
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
-## Name
-Choose a self-explaining name for your project.
+# Exercice 2 : do 
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+On désire implanter un programme `do` qui exécute indépendamment et
+simultanément une série de commandes Shell données sur la ligne de
+commande. L'exécution du programme se termine quand l'ensemble des
+commandes a terminé. Le programme retourne alors un statut formé de la
+conjonction (et, option `-a` (and)) ou de la disjonction (ou, option
+`-o`) des statuts retournés par les commandes selon la valeur de
+l'option.  Par défaut (si l'utilisateur n'a précisé ni `-a` ni `-o`),
+on utilisera la conjonction.  La syntaxe est la suivante :
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+```bash
+do [-a|-o] command...
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+On utilise cette commande `do` suivant l'exemple suivant :
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```bash
+do -a emacs firefox xterm
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Implantez la commande `do`
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+## Coupe-circuit
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Une utilisation possible de la commande `do` est de ne s'intéresser
+qu'aux valeurs de retour des commandes lancées. Dans ce cas, il est
+possible de conclure sur la valeur de retour de la commande `do` dès
+qu'une des commandes retourne un succès (pour l'option `-o`, ou
+retourne un échec pour l'option `-a`) : on parle de *conjonction ou
+disjonction coupe-circuit*. Ce fonctionnement est activée par l'option
+`-c` de la commande `do`.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Par exemple, la commande 
+```bash
+do -c false emacs 
+```
+sortira immédiatement avec valeur de retour 1 sans attendre la terminaison du processu `emacs`. 
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+De même, la commande
+```bash
+do -c -o true emacs 
+```
+sortira immédiatement avec valeur de retour 0, même si le processus
+`emacs` reste en exécution. 
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Implantez cette variation. 
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
 
-## License
-For open source projects, say how it is licensed.
+## Commandes avec paramètres
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Pour raffiner `do`, on désire que les commandes puissent
+accepter des paramètres et ainsi utiliser la commande de la
+manière suivante :
+
+```bash
+do -a "vim test.c" "xclock -update 1"
+```
+
+Pour implanter cette version de la commande `do`, vous pouvez utiliser
+la librairie `makeargv.h/.c` fourni dans le dépôt qui sert à séparer
+les arguments. Un exemple d'utilisation est dans le fichier
+`args.c`. Nous vous conseillons d'expérimenter avec ce dernier avant
+d'implanter la dernière version du deuxième exercice.
+
