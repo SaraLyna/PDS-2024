@@ -22,10 +22,13 @@ int main(int argc, char *argv[]){
   if(pid== -1){
     exit(EXIT_FAILURE);
   } else if(pid==0){
-    execl("/usr/bin/ls","ls",NULL);
+    char *args[2] = {argv[1]};
+    execvp(argv[1],args);
+
   }
   wait(NULL);
-  execl("/usr/bin/id","id",NULL);
+  char *args[2] = {argv[3]};
+  execvp(argv[3],args);
 
     return EXIT_SUCCESS;
 }

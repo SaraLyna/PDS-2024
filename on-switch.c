@@ -19,10 +19,13 @@ int main(int argc, char *argv[]){
 
   switch(pid=fork()){
     case -1 : exit(EXIT_FAILURE);
-    case 0 : execl("/usr/bin/ls","ls",NULL);
+    case 0 : {execvp(NULL,NULL);
+              return 0;
+    }
+    default : return 1;
   }
   wait(NULL);
-  execl("/usr/bin/id","id",NULL);
+  execvp(NULL,NULL);
 
     return EXIT_SUCCESS;
 }
