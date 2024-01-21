@@ -15,20 +15,35 @@
 #include <sys/wait.h>
 
 int main(int argc, char *argv[]){
-  pid_t pid;
+  if (argc != 4) {
+        exit(EXIT_FAILURE);
+  }
 
-  pid=fork();
+  pid_t pid = fork();
 
   if(pid== -1){
+    perror("fork");
     exit(EXIT_FAILURE);
   } else if(pid==0){
-    char *args[2] = {argv[1]};
-    execvp(argv[1],args);
+      if (execlp(argv[1], argv[1], NULL) == -1) {
+            perror("execlp");
+            exit(EXIT_FAILURE);
+      }
+
+  } else {
+    int status;
+    if (waitpid(pid, &status, 0) == -1) {
+            perror("waitpid");
+            exit(EXIT_FAILURE);
+    }
+    if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
+            if (execlp(argv[3], argv[3], NULL) == -1) {
+                perror("execlp");
+                exit(EXIT_FAILURE);
+            }
+    }
 
   }
-  wait(NULL);
-  char *args[2] = {argv[3]};
-  execvp(argv[3],args);
 
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
